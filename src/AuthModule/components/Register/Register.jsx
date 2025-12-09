@@ -13,7 +13,10 @@ export default function Register() {
     formState: { errors },
     handleSubmit,
     getValues,
-  } = useForm();
+    trigger,
+  } = useForm({
+    mode: "onBlur",
+  });
   let navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -98,10 +101,11 @@ export default function Register() {
                 </div>
               )}
 
-              <div className="input-group mb-3">
+              <div className="input-group mb-3 position-relative">
                 <span className="input-group-text bg-white" id="basic-addon1">
                   <i className="fa-solid fa-lock text-muted"></i>
                 </span>
+
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password", {
@@ -112,19 +116,19 @@ export default function Register() {
                         "Password must start with a capital letter and contain letters, numbers, and a special character",
                     },
                   })}
-                  className="form-control"
+                  className="form-control pe-5"
                   placeholder="Ibrahim@123"
                 />
-                <span
-                  className="input-group-text bg-white"
+
+                {/* 👁️ أيكونة الإظهار/الإخفاء — هنا مش جوه span */}
+                <i
+                  className={`${
+                    showPassword ? "fa fa-eye-slash" : "fa fa-eye"
+                  } eye-position`}
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <i
-                    className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"}
-                  ></i>
-                </span>
+                ></i>
               </div>
+
               {errors.password && (
                 <div className="alert alert-danger p-2">
                   {errors.password.message}
@@ -140,7 +144,7 @@ export default function Register() {
                   ></i>
                 </span>
                 <input
-                  type="text"
+                  type="email"
                   {...register("email", {
                     required: "Email is Required",
                     pattern: {
@@ -185,33 +189,35 @@ export default function Register() {
                 </div>
               )}
 
-              <div className="input-group mb-3">
+              <div className="mb-3 position-relative input-group">
                 <span className="input-group-text bg-white" id="basic-addon1">
                   <i className="fa-solid fa-lock text-muted"></i>
                 </span>
                 <input
                   type={showConfirm ? "text" : "password"}
+                  className="form-control pe-5"
+                  placeholder="Confirm Password"
                   {...register("confirmPassword", {
                     required: "Confirm Password is Required",
                     validate: (value) =>
                       value === getValues("password") ||
                       "Passwords do not match",
                   })}
-                  className="form-control"
-                  placeholder="Confirm Password"
+                  onChange={(e) => {
+                    register("confirmPassword").onChange(e);
+                    trigger("confirmPassword");
+                  }}
                 />
-                <span
-                  className="input-group-text bg-white"
+
+                {/* Eye Icon */}
+                <i
+                  className={`${
+                    showConfirm ? "fa fa-eye-slash" : "fa fa-eye"
+                  } eye-position`}
                   onClick={() => setShowConfirm(!showConfirm)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <i
-                    className={
-                      showConfirm ? "fa fa-eye-slash border-0" : "fa fa-eye"
-                    }
-                  ></i>
-                </span>
+                ></i>
               </div>
+
               {errors.confirmPassword && (
                 <div className="alert alert-danger p-2">
                   {errors.confirmPassword.message}

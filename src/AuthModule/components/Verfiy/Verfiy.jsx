@@ -9,7 +9,9 @@ export default function Verfiy() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+  });
   let navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -38,7 +40,7 @@ export default function Verfiy() {
               <i className="fa fa-envelope text-muted" aria-hidden="true"></i>
             </span>
             <input
-              type="text"
+              type="email"
               {...register("email", {
                 required: "Email is Required",
                 pattern: {

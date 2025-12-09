@@ -9,7 +9,9 @@ export default function ForgetPassword() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    mode: "all",
+  });
   let navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -51,13 +53,16 @@ export default function ForgetPassword() {
                   message: "Please Enter a Valid Mail",
                 },
               })}
-              type="text"
+              type="email"
               className="form-control"
               placeholder="Enter Your Email"
               aria-label="email"
               aria-describedby="basic-addon1"
             />
           </div>
+          {errors.email && (
+            <div className="alert alert-danger p-2">{errors.email.message}</div>
+          )}
           <button className="background-main btn w-100 text-white">
             Submit
           </button>

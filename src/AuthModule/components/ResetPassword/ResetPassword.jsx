@@ -12,7 +12,9 @@ export default function ResetPassword() {
     formState: { errors },
     handleSubmit,
     getValues,
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+  });
   let navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -54,7 +56,7 @@ export default function ResetPassword() {
                   message: "Please Enter a Valid Mail",
                 },
               })}
-              type="text"
+              type="email"
               className="form-control"
               placeholder="Enter Your Email"
               aria-label="email"
@@ -83,10 +85,11 @@ export default function ResetPassword() {
           {errors.code && (
             <div className="alert alert-danger p-2">{errors.code.message}</div>
           )}
-          <div className="input-group mb-3">
+          <div className="input-group mb-3 position-relative">
             <span className="input-group-text bg-white" id="basic-addon1">
               <i className="fa-solid fa-lock text-muted"></i>
             </span>
+
             <input
               type={showPassword ? "text" : "password"}
               {...register("password", {
@@ -97,48 +100,52 @@ export default function ResetPassword() {
                     "Password must start with a capital letter and contain letters, numbers, and a special character",
                 },
               })}
-              className="form-control"
+              className="form-control pe-5"
               placeholder="Ibrahim@123"
             />
-            <span
-              className="input-group-text bg-white"
+
+            {/* 👁️ أيكونة الإظهار/الإخفاء — هنا مش جوه span */}
+            <i
+              className={`${
+                showPassword ? "fa fa-eye-slash" : "fa fa-eye"
+              } eye-position`}
               onClick={() => setShowPassword(!showPassword)}
-              style={{ cursor: "pointer" }}
-            >
-              <i className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"}></i>
-            </span>
+            ></i>
           </div>
+
           {errors.password && (
             <div className="alert alert-danger p-2">
               {errors.password.message}
             </div>
           )}
-          <div className="input-group mb-3">
+          <div className=" input-group mb-3 position-relative">
             <span className="input-group-text bg-white" id="basic-addon1">
               <i className="fa-solid fa-lock text-muted"></i>
             </span>
             <input
               type={showConfirm ? "text" : "password"}
+              className="form-control pe-5"
+              placeholder="Confirm Password"
               {...register("confirmPassword", {
                 required: "Confirm Password is Required",
                 validate: (value) =>
                   value === getValues("password") || "Passwords do not match",
               })}
-              className="form-control"
-              placeholder="Confirm Password"
+              onChange={(e) => {
+                register("confirmPassword").onChange(e);
+                trigger("confirmPassword");
+              }}
             />
-            <span
-              className="input-group-text bg-white"
+
+            {/* Eye Icon */}
+            <i
+              className={`${
+                showConfirm ? "fa fa-eye-slash" : "fa fa-eye"
+              } eye-position`}
               onClick={() => setShowConfirm(!showConfirm)}
-              style={{ cursor: "pointer" }}
-            >
-              <i
-                className={
-                  showConfirm ? "fa fa-eye-slash border-0" : "fa fa-eye"
-                }
-              ></i>
-            </span>
+            ></i>
           </div>
+
           {errors.confirmPassword && (
             <div className="alert alert-danger p-2">
               {errors.confirmPassword.message}
