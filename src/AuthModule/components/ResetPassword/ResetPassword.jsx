@@ -95,7 +95,8 @@ export default function ResetPassword() {
               {...register("password", {
                 required: "Password is Required",
                 pattern: {
-                  value: /^[A-Z][a-zA-Z\d@#$%^&*!]{5,}$/,
+                  value:
+                    /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{5,}$/,
                   message:
                     "Password must start with a capital letter and contain letters, numbers, and a special character",
                 },
