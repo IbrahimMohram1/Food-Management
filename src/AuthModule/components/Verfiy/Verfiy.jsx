@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function Verfiy() {
   let {
@@ -13,18 +14,9 @@ export default function Verfiy() {
     mode: "onBlur",
   });
   let navigate = useNavigate();
-
-  const onSubmit = async (data) => {
-    try {
-      let response = await axios.put(
-        "https://upskilling-egypt.com:3006/api/v1/Users/verify",
-        data,
-      );
-      toast.success("Verify is Success");
-      navigate("/login");
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+  const VerifyAccount = useAuthStore((state) => state.VerifyAcc);
+  const onSubmit = (data) => {
+    VerifyAccount(data, toast, navigate);
   };
   return (
     <>

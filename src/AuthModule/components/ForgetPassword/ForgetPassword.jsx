@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosClient from "../../../axiosClient";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function ForgetPassword() {
   let {
@@ -14,17 +15,9 @@ export default function ForgetPassword() {
     mode: "all",
   });
   let navigate = useNavigate();
-
-  const onSubmit = async (data) => {
-    try {
-      let response = await axiosClient.post("Users/Reset/Request", data);
-      console.log(response);
-      navigate("/reset-pass");
-
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+  const forgetPass = useAuthStore((store) => store.ForgetUserPassword);
+  const onSubmit = (data) => {
+    forgetPass(data, toast, navigate);
   };
   return (
     <>
@@ -41,7 +34,7 @@ export default function ForgetPassword() {
           <div className="input-group mb-3">
             <span className="input-group-text bg-white" id="basic-addon1">
               {" "}
-              <i class="fa fa-envelope text-muted" aria-hidden="true"></i>
+              <i className="fa fa-envelope text-muted" aria-hidden="true"></i>
             </span>
             <input
               {...register("email", {

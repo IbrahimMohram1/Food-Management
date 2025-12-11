@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosClient from "../../../axiosClient";
+import { useAuthApi } from "../../../Hooks/useAuth";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function Login() {
   let {
@@ -15,14 +17,9 @@ export default function Login() {
   });
   let navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    try {
-      let response = await axiosClient.post("/Users/Login", data);
-      toast.success("Login is Success");
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+  const login = useAuthStore((state) => state.LoginUser);
+  const onSubmit = (data) => {
+    login(data, toast, navigate);
   };
   return (
     <div className="form-container">

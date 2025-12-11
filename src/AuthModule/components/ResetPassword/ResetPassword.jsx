@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useToggle from "../../../Hooks/useToggle";
 import axiosClient from "../../../axiosClient";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function ResetPassword() {
   const [showPassword, toggleShowPassword] = useToggle(false);
@@ -18,17 +19,10 @@ export default function ResetPassword() {
     mode: "onBlur",
   });
   let navigate = useNavigate();
+  const resetPass = useAuthStore((state) => state.ResetUserPassword);
 
-  const onSubmit = async (data) => {
-    try {
-      let response = await axiosClient.post("/Users/Reset", data);
-      console.log(response);
-      navigate("/login");
-
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+  const onSubmit = (data) => {
+    resetPass(data, toast, navigate);
   };
   return (
     <>

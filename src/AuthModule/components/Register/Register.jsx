@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useToggle from "../../../Hooks/useToggle";
 import axiosClient from "../../../axiosClient";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function Register() {
   const [showPassword, toggleShowPassword] = useToggle(false);
@@ -20,17 +21,10 @@ export default function Register() {
     mode: "onBlur",
   });
   let navigate = useNavigate();
+  const registerUser = useAuthStore((state) => state.RegisterUser);
 
-  const onSubmit = async (data) => {
-    try {
-      let response = await axiosClient.post("/Users/Register", data);
-      console.log(data);
-
-      toast.success("Register is Success");
-      navigate("/verify-account");
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+  const onSubmit = (data) => {
+    registerUser(data, toast, navigate);
   };
   return (
     <>
