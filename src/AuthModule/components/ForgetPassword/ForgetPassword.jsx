@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axiosClient from "../../../axiosClient";
 
 export default function ForgetPassword() {
   let {
@@ -16,10 +17,7 @@ export default function ForgetPassword() {
 
   const onSubmit = async (data) => {
     try {
-      let response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request",
-        data,
-      );
+      let response = await axiosClient.post("Users/Reset/Request", data);
       console.log(response);
       navigate("/reset-pass");
 

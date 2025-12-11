@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useToggle from "../../../Hooks/useToggle";
+import axiosClient from "../../../axiosClient";
 
 export default function ResetPassword() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showPassword, toggleShowPassword] = useToggle(false);
+  const [showConfirmPassword, toggleShowConfirmPassword] = useToggle(false);
   let {
     register,
     formState: { errors },
@@ -19,10 +21,7 @@ export default function ResetPassword() {
 
   const onSubmit = async (data) => {
     try {
-      let response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset",
-        data,
-      );
+      let response = await axiosClient.post("/Users/Reset", data);
       console.log(response);
       navigate("/login");
 
@@ -104,13 +103,12 @@ export default function ResetPassword() {
               className="form-control pe-5"
               placeholder="Ibrahim@123"
             />
-
-            {/* 👁️ أيكونة الإظهار/الإخفاء — هنا مش جوه span */}
+            {/* --------------------- */}
             <i
               className={`${
                 showPassword ? "fa fa-eye-slash" : "fa fa-eye"
               } eye-position`}
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={toggleShowPassword}
             ></i>
           </div>
 
@@ -124,7 +122,7 @@ export default function ResetPassword() {
               <i className="fa-solid fa-lock text-muted"></i>
             </span>
             <input
-              type={showConfirm ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               className="form-control pe-5"
               placeholder="Confirm Password"
               {...register("confirmPassword", {
@@ -137,13 +135,12 @@ export default function ResetPassword() {
                 trigger("confirmPassword");
               }}
             />
-
-            {/* Eye Icon */}
+            {/* --------------------- */}
             <i
               className={`${
-                showConfirm ? "fa fa-eye-slash" : "fa fa-eye"
+                showConfirmPassword ? "fa fa-eye-slash" : "fa fa-eye"
               } eye-position`}
-              onClick={() => setShowConfirm(!showConfirm)}
+              onClick={toggleShowConfirmPassword}
             ></i>
           </div>
 
