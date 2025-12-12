@@ -1,12 +1,18 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useToggle from "../../../Hooks/useToggle";
-import axiosClient from "../../../axiosClient";
 import { useAuthStore } from "../../../store/authStore";
-
+import {
+  userNameRules,
+  emailRules,
+  passwordRules,
+  countryRules,
+  phoneRules,
+  confirmPasswordRules,
+} from "../../../Utils/ValidationRules";
 export default function Register() {
   const [showPassword, toggleShowPassword] = useToggle(false);
   const [showConfirmPassword, toggleShowConfirmPassword] = useToggle(false);
@@ -15,11 +21,14 @@ export default function Register() {
     register,
     formState: { errors },
     handleSubmit,
-    getValues,
     trigger,
+    control,
   } = useForm({
     mode: "onBlur",
+    defaultValues: { password: "", confirmPassword: "" },
   });
+  const password = useWatch({ control, name: "password" });
+
   let navigate = useNavigate();
   const registerUser = useAuthStore((state) => state.RegisterUser);
 
@@ -46,17 +55,7 @@ export default function Register() {
                 </span>
                 <input
                   type="text"
-                  {...register("userName", {
-                    required: "UserName is Required",
-                    maxLength: {
-                      value: 8,
-                      message: "Maximum length is 8",
-                    },
-                    pattern: {
-                      value: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{1,8}$/,
-                      message: "Please Enter a Char with number max is 8",
-                    },
-                  })}
+                  {...register("userName", userNameRules)}
                   className="form-control"
                   placeholder="Enter Your Name"
                   aria-label="userName "
@@ -75,13 +74,7 @@ export default function Register() {
                 </span>
                 <input
                   type="text"
-                  {...register("country", {
-                    required: "Country is Required",
-                    minLength: {
-                      value: 3,
-                      message: "min length is 3",
-                    },
-                  })}
+                  {...register("country", countryRules)}
                   className="form-control"
                   placeholder="Country"
                   aria-label="country"
@@ -101,15 +94,7 @@ export default function Register() {
 
                 <input
                   type={showPassword ? "text" : "password"}
-                  {...register("password", {
-                    required: "Password is Required",
-                    pattern: {
-                      value:
-                        /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{5,}$/,
-                      message:
-                        "Password must start with a capital letter and contain letters, numbers, and a special character",
-                    },
-                  })}
+                  {...register("password", passwordRules)}
                   className="form-control pe-5"
                   placeholder="Ibrahim@123"
                 />
@@ -138,13 +123,7 @@ export default function Register() {
                 </span>
                 <input
                   type="email"
-                  {...register("email", {
-                    required: "Email is Required",
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                      message: "Please Enter a Valid Mail",
-                    },
-                  })}
+                  {...register("email", emailRules)}
                   className="form-control"
                   placeholder="Enter Your Email"
                   aria-label="email"
@@ -163,13 +142,7 @@ export default function Register() {
                 </span>
                 <input
                   type="tel"
-                  {...register("phoneNumber", {
-                    required: "PhoneNumber is Required",
-                    pattern: {
-                      value: /^(?:\+20)?01[0-9]{9}$/,
-                      message: "Please enter a valid Phone Number",
-                    },
-                  })}
+                  {...register("phoneNumber", phoneRules)}
                   className="form-control"
                   placeholder="PhoneNumber "
                   aria-label="phoneNumber  "
@@ -190,12 +163,10 @@ export default function Register() {
                   type={showConfirmPassword ? "text" : "password"}
                   className="form-control pe-5"
                   placeholder="Confirm Password"
-                  {...register("confirmPassword", {
-                    required: "Confirm Password is Required",
-                    validate: (value) =>
-                      value === getValues("password") ||
-                      "Passwords do not match",
-                  })}
+                  {...register(
+                    "confirmPassword",
+                    confirmPasswordRules(password),
+                  )}
                   onChange={(e) => {
                     register("confirmPassword").onChange(e);
                     trigger("confirmPassword");

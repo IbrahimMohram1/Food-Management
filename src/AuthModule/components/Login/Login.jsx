@@ -3,10 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosClient from "../../../axiosClient";
-import { useAuthApi } from "../../../Hooks/useAuth";
 import { useAuthStore } from "../../../store/authStore";
-
+import { emailRules, passwordRules } from "../../../Utils/ValidationRules";
 export default function Login() {
   let {
     register,
@@ -35,13 +33,7 @@ export default function Login() {
           </span>
           <input
             type="email"
-            {...register("email", {
-              required: "Email is Required",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                message: "Please Enter a Valid Mail",
-              },
-            })}
+            {...register("email", emailRules)}
             className="form-control"
             placeholder="Enter Your Email"
             aria-label="email"
@@ -57,15 +49,7 @@ export default function Login() {
           </span>
           <input
             type="password"
-            {...register("password", {
-              required: "Password is Required",
-              pattern: {
-                value:
-                  /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{5,}$/,
-                message:
-                  "Password must start with a capital letter and contain letters, numbers, and a special character",
-              },
-            })}
+            {...register("password", passwordRules)}
             className="form-control"
             placeholder=" Ibrahim@123"
             aria-label="password"

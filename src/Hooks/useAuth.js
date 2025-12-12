@@ -1,5 +1,5 @@
 import axios from "axios";
-import axiosClient from "../axiosClient";
+import axiosClient from "../Utils/axiosClient";
 
 export const useAuthApi=()=>{
     const login = async (values)=>{

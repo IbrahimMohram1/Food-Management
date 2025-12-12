@@ -3,9 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosClient from "../../../axiosClient";
 import { useAuthStore } from "../../../store/authStore";
-
+import { emailRules } from "../../../Utils/ValidationRules";
 export default function ForgetPassword() {
   let {
     register,
@@ -37,13 +36,7 @@ export default function ForgetPassword() {
               <i className="fa fa-envelope text-muted" aria-hidden="true"></i>
             </span>
             <input
-              {...register("email", {
-                required: "Email is Required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                  message: "Please Enter a Valid Mail",
-                },
-              })}
+              {...register("email", emailRules)}
               type="email"
               className="form-control"
               placeholder="Enter Your Email"

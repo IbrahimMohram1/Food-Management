@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuthStore } from "../../../store/authStore";
-
+import { emailRules, otpRules } from "../../../Utils/ValidationRules";
 export default function Verfiy() {
   let {
     register,
@@ -33,13 +33,7 @@ export default function Verfiy() {
             </span>
             <input
               type="email"
-              {...register("email", {
-                required: "Email is Required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                  message: "Please Enter a Valid Mail",
-                },
-              })}
+              {...register("email", emailRules)}
               className="form-control"
               placeholder="Enter Your Email"
               aria-label="email"
@@ -55,13 +49,7 @@ export default function Verfiy() {
             </span>
             <input
               type="text"
-              {...register("code", {
-                required: "OTP is Required",
-                minLength: {
-                  value: 3,
-                  message: "Enter a Valid OTP Code",
-                },
-              })}
+              {...register("code", otpRules)}
               className="form-control"
               placeholder="OTP"
               aria-label="code"

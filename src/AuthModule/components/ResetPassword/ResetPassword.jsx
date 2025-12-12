@@ -1,12 +1,16 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useToggle from "../../../Hooks/useToggle";
-import axiosClient from "../../../axiosClient";
 import { useAuthStore } from "../../../store/authStore";
-
+import {
+  emailRules,
+  passwordRules,
+  otpRules,
+  confirmPasswordRules,
+} from "../../../Utils/ValidationRules";
 export default function ResetPassword() {
   const [showPassword, toggleShowPassword] = useToggle(false);
   const [showConfirmPassword, toggleShowConfirmPassword] = useToggle(false);
@@ -14,10 +18,13 @@ export default function ResetPassword() {
     register,
     formState: { errors },
     handleSubmit,
-    getValues,
+    control,
   } = useForm({
     mode: "onBlur",
+    defaultValues: { password: "", confirmPassword: "" },
   });
+  const password = useWatch({ control, name: "password" });
+
   let navigate = useNavigate();
   const resetPass = useAuthStore((state) => state.ResetUserPassword);
 
@@ -42,13 +49,7 @@ export default function ResetPassword() {
               <i class="fa fa-envelope text-muted" aria-hidden="true"></i>
             </span>
             <input
-              {...register("email", {
-                required: "Email is Required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-                  message: "Please Enter a Valid Mail",
-                },
-              })}
+              {...register("email", emailRules)}
               type="email"
               className="form-control"
               placeholder="Enter Your Email"
@@ -56,27 +57,24 @@ export default function ResetPassword() {
               aria-describedby="basic-addon1"
             />
           </div>
+          {errors.email && (
+            <div className="alert alert-danger p-2">{errors.email.message}</div>
+          )}
           <div className="input-group mb-3">
             <span className="input-group-text bg-white" id="basic-addon1">
               <i className="fa-solid fa-asterisk text-muted"></i>
             </span>
             <input
               type="text"
-              {...register("seed", {
-                required: "OTP is Required",
-                minLength: {
-                  value: 3,
-                  message: "Enter a Valid OTP Code",
-                },
-              })}
+              {...register("seed", otpRules)}
               className="form-control"
               placeholder="OTP"
               aria-label="code"
               aria-describedby="basic-addon1"
             />
           </div>
-          {errors.code && (
-            <div className="alert alert-danger p-2">{errors.code.message}</div>
+          {errors.seed && (
+            <div className="alert alert-danger p-2">{errors.seed.message}</div>
           )}
           <div className="input-group mb-3 position-relative">
             <span className="input-group-text bg-white" id="basic-addon1">
@@ -85,15 +83,7 @@ export default function ResetPassword() {
 
             <input
               type={showPassword ? "text" : "password"}
-              {...register("password", {
-                required: "Password is Required",
-                pattern: {
-                  value:
-                    /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{5,}$/,
-                  message:
-                    "Password must start with a capital letter and contain letters, numbers, and a special character",
-                },
-              })}
+              {...register("password", passwordRules)}
               className="form-control pe-5"
               placeholder="Ibrahim@123"
             />
@@ -119,11 +109,7 @@ export default function ResetPassword() {
               type={showConfirmPassword ? "text" : "password"}
               className="form-control pe-5"
               placeholder="Confirm Password"
-              {...register("confirmPassword", {
-                required: "Confirm Password is Required",
-                validate: (value) =>
-                  value === getValues("password") || "Passwords do not match",
-              })}
+              {...register("confirmPassword", confirmPasswordRules(password))}
               onChange={(e) => {
                 register("confirmPassword").onChange(e);
                 trigger("confirmPassword");
