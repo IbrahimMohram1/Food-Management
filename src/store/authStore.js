@@ -11,10 +11,12 @@ export const useAuthStore = create((set) => {
     LoginUser: async (data, toast, navigate) => {
       try {
         const response = await login(data);
+        const token = response.token;
+        localStorage.setItem("access_token", token);
         toast.success("Login is Success");
         navigate("/dashboard");
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error);
       }
     },
     RegisterUser: async (data, toast, navigate) => {
@@ -53,6 +55,9 @@ export const useAuthStore = create((set) => {
       } catch (error) {
         toast.error(error?.response?.data?.message);
       }
+    },
+    LogoutUser: () => {
+      set({ token: null });
     },
   };
 });

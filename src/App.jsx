@@ -22,6 +22,7 @@ import CategoriesList from "./CategoriesModule/components/CategoriesList/Categor
 import CategoryData from "./CategoriesModule/components/CategoryData/CategoryData";
 import UsersList from "./UsersModule/components/UsersList/UsersList";
 import { Bounce, ToastContainer } from "react-toastify";
+import ProtectedRoute from "./Shared/components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const routes = createHashRouter([
@@ -40,7 +41,12 @@ function App() {
     },
     {
       path: "dashboard",
-      element: <MasterLayout />,
+
+      element: (
+        <ProtectedRoute>
+          <MasterLayout />
+        </ProtectedRoute>
+      ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard /> },

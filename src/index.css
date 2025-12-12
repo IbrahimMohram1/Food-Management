@@ -33,3 +33,33 @@
             cursor: pointer;
             color: #6c757d;
 }
+.sidebar-toggle{
+width: 80%;
+min-width: 90px;
+    height: auto;
+    cursor: pointer;}
+
+   
+
+
+
+           .sideBar-Container .ps-sidebar-container{
+                border-top-right-radius: 58px;
+                background-color: #1F263E;
+                min-height: 100vh;
+       }
+       .sideBar-Container .ps-menu-button:hover{
+            background-color: rgba(0, 146, 77, 0.1) !important;
+            border-left:4px solid var(--main-color);
+       }
+header{
+    background-color: var(--main-color);
+    border-radius: 12px;
+}
+.sideBar-Container .ps-sidebar-root{
+    border: none;
+}
+.caption span{
+    color: var(--main-color);
+    
+}
