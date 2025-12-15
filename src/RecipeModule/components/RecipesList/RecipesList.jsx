@@ -15,7 +15,7 @@ export default function RecipesList() {
     fetchRecipes();
   }, []);
   return (
-    <div>
+    <div className="">
       <Header
         imageSize={"w-50"}
         title={"Items"}
@@ -31,13 +31,13 @@ export default function RecipesList() {
         buttonTitle={"Add New Item"}
       />
 
-      <div className="table-container p-3">
+      <div className="table-container p-3 overflow-x-auto">
         <div className="">
           {loading ? (
             <LoaderSpinner />
           ) : recipes.length > 0 ? (
-            <div className="table-responsive">
-              <table className="table table-striped overflow-scroll">
+            <div className="table-responsive ">
+              <table className="table table-striped  min-w-full ">
                 <thead>
                   <tr>
                     <th>#</th>

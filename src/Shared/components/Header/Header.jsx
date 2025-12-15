@@ -9,18 +9,16 @@ export default function Header({
   return (
     <>
       <header className="mt-4">
-        <div className="container-fluid text-white  ">
-          <div className="row px-5">
-            <div className="col-md-8">
-              <div className="d-flex justify-content-center h-100 flex-column">
-                <h4>
-                  <span className="fs-2 fw-bolder">{spanText}</span> {title}
-                </h4>
-                <p>{description}</p>
-              </div>
+        <div className="container px-lg-5 text-white">
+          <div className="row">
+            <div className="col-md-8 d-flex  flex-column justify-content-center h-100">
+              <h4>
+                <span className="fs-2 fw-bolder">{spanText}</span> {title}
+              </h4>
+              <p className="text-wrap">{description}</p>
             </div>
-            <div className="col-md-4 text-center ">
-              <img className={imageSize} src={imgUrl} alt="" />
+            <div className="col-md-4 text-center">
+              <img className={`img-fluid ${imageSize}`} src={imgUrl} alt="" />
             </div>
           </div>
         </div>
