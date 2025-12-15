@@ -10,7 +10,7 @@ export default function MasterLayout() {
         <div className="vh-100  ">
           <AppSideBar />
         </div>
-        <div className="w-100 mx-5">
+        <div className=" w-100 px-5 mx-auto overflow-auto ">
           <Navbar />
           <Outlet />
         </div>

@@ -6,6 +6,7 @@ let { getCategoryList } = useCategory();
 
 export const useCategoryStore = create((set) => ({
   categories: [],
+  loading: true,
   fetchCategories: async () => {
     try {
       const { data } = await getCategoryList();
@@ -13,10 +14,14 @@ export const useCategoryStore = create((set) => ({
 
       set({
         categories: data,
+        loading: false,
+
         error: null,
       });
     } catch (error) {
       set({
+        loading: false,
+
         error: err.response?.data?.message || "Error fetching recipes",
       });
     }

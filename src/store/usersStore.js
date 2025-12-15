@@ -1,23 +1,22 @@
 import { create } from "zustand";
 import { useRecipes } from "../Hooks/useRecipes";
+import { useUsersList } from "../Hooks/useUsers";
 
-let { getRecipesList } = useRecipes();
+let { getUsersList } = useUsers();
 
-export const useRecipesStore = create((set) => ({
-  recipes: [],
-  loading: true,
-  fetchRecipes: async () => {
+export const useUsersStore = create((set) => ({
+  users: [],
+  fetchUsersList: async () => {
     try {
-      const { data } = await getRecipesList();
+      const { data } = await getUsersList();
+      console.log(data);
 
       set({
-        recipes: data,
-        loading: false,
+        users: data,
         error: null,
       });
     } catch (error) {
       set({
-        loading: false,
         error: err.response?.data?.message || "Error fetching recipes",
       });
     }

@@ -5,9 +5,11 @@ import Header from "../../../Shared/components/Header/Header";
 import HeaderImage from "../../../assets/images/RecipesImage.png";
 import SubHeader from "../../../Shared/components/SubHeader/SubHeader";
 import NoData from "../../../Shared/components/NoData/NoData";
+import ActionButtons from "../../../Shared/components/ActionButtons/ActionButtons";
+import LoaderSpinner from "../../../Shared/components/LoaderSpinner/LoaderSpinner";
 
 export default function CategoriesList() {
-  let { fetchCategories, categories } = useCategoryStore();
+  let { fetchCategories, categories, loading } = useCategoryStore();
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -30,25 +32,35 @@ export default function CategoriesList() {
         />
         <div className="table-container p-3">
           <div className="">
-            {categories.length > 0 ? (
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>CategoryName</th>
-                    <th>Category Creation Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((category, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{category.name}</td>
-                      <td>{category.creationDate}</td>
+            {loading ? (
+              <LoaderSpinner />
+            ) : categories.length > 0 ? (
+              <div className="table-responsive">
+                <table className="table table-striped overflow-scroll w-100">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>CategoryName</th>
+                      <th>Category Creation Date</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {categories.map((category, index) => (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{category.name}</td>
+                        <td>
+                          {new Date(category.creationDate).toLocaleDateString()}
+                        </td>
+                        <td>
+                          <ActionButtons />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoData />
             )}
