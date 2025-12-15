@@ -5,6 +5,7 @@ import "./App.css";
 import {
   createBrowserRouter,
   createHashRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 import AuthLayout from "./Shared/components/AuthLayout/AuthLayout";
@@ -31,7 +32,14 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login /> },
+        {
+          index: true,
+          element: localStorage.getItem("access_token") ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Login />
+          ),
+        },
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-pass", element: <ForgetPassword /> },
