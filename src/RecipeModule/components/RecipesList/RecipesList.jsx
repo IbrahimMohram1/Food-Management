@@ -27,9 +27,10 @@ export default function RecipesList() {
     setShow(false);
   };
   let BaseUrl = "https://upskilling-egypt.com:3006/";
+
   useEffect(() => {
     fetchRecipes();
-  }, [recipes]);
+  }, []);
   return (
     <div className="">
       <Header

@@ -9,7 +9,6 @@ export const useRecipesStore = create((set) => ({
   fetchRecipes: async () => {
     try {
       const { data } = await getRecipesList();
-
       set({
         recipes: data,
         loading: false,
@@ -25,15 +24,15 @@ export const useRecipesStore = create((set) => ({
   deleteRecipe: async (id) => {
     try {
       const data = await deleteRecipeById(id);
-      set({
-        recipes: data,
+      set((state) => ({
+        recipes: state.recipes.filter((recipe) => recipe.id !== id),
         loading: false,
         error: null,
-      });
+      }));
     } catch (error) {
       set({
         loading: false,
-        error: err.response?.data?.message || "Error deleting recipes",
+        error: "Error deleting recipes",
       });
     }
   },
