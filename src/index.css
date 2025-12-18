@@ -1,71 +1,90 @@
 .auth-container {
-    background-image: url('./assets/images/FoodBackground.jpg');
-    background-size: cover;
-    background-position: center center;
+  background-image: url("./assets/images/FoodBackground.jpg");
+  background-size: cover;
+  background-position: center center;
 }
 
 .bg-overlay {
-    background: linear-gradient(45deg, rgba(47, 140, 96, .5), rgba(0, 0, 0, 0.9));
+  background: linear-gradient(
+    45deg,
+    rgba(47, 140, 96, 0.5),
+    rgba(0, 0, 0, 0.9)
+  );
 }
 
-
 :root {
-    --main-color: #4AA35A;
+  --main-color: #4aa35a;
 }
 
 .text-main {
-    color: var(--main-color);
+  color: var(--main-color);
 }
 
 .background-main {
-    background-color: var(--main-color);
+  background-color: var(--main-color);
 }
 
 .btn:hover {
-    background-color: var(--main-color) !important;
+  background-color: var(--main-color) !important;
 }
 
-.eye-position{
-    position: absolute;
-           right : 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #6c757d;
+.eye-position {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
 }
-.sidebar-toggle{
-width: 80%;
-min-width: 90px;
-    height: auto;
-    cursor: pointer;}
-
-   
-
-
-
-           .sideBar-Container .ps-sidebar-container{
-                border-top-right-radius: 58px;
-                background-color: #1F263E;
-                min-height: 100vh;
-       }
-       .sideBar-Container .ps-menu-button:hover{
-            background-color: rgba(0, 146, 77, 0.1) !important;
-            border-left:4px solid var(--main-color);
-       }
-header{
-    background-color: var(--main-color);
-    border-radius: 12px;
+.sidebar-toggle {
+  width: 80%;
+  min-width: 90px;
+  height: auto;
+  cursor: pointer;
 }
-.sideBar-Container .ps-sidebar-root{
-    border: none;
+
+.sideBar-Container .ps-sidebar-container {
+  border-top-right-radius: 58px;
+  background-color: #1f263e;
+  min-height: 100vh;
 }
-.caption span{
-    color: var(--main-color);
-    
+.sideBar-Container .ps-menu-button:hover {
+  background-color: rgba(0, 146, 77, 0.1) !important;
+  border-left: 4px solid var(--main-color);
+}
+header {
+  background-color: var(--main-color);
+  border-radius: 12px;
+}
+.sideBar-Container .ps-sidebar-root {
+  border: none;
+}
+.caption span {
+  color: var(--main-color);
 }
 .TableimgStyle {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.modal-header {
+  border: none !important;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.modal-header .customCloseBtn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  border: 1px solid red;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.modal-header .customCloseBtn i {
+  cursor: pointer;
 }

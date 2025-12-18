@@ -5,5 +5,9 @@ export const useRecipes = () => {
     const { data } = await axiosClient.get("/Recipe/?pageSize=10&pageNumber=1");
     return data;
   };
-  return { getRecipesList };
+  const deleteRecipeById = async (id) => {
+    const { data } = await axiosClient.delete(`/Recipe/${id}`);
+    return data;
+  };
+  return { getRecipesList, deleteRecipeById };
 };

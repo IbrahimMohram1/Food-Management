@@ -1,6 +1,9 @@
 import React from "react";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function Navbar() {
+  const { user } = useAuthStore();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,7 +23,7 @@ export default function Navbar() {
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <a className="nav-link active" aria-current="page" href="#">
-                  UpSkilling
+                  {user ? user.userName : "Guest"}
                 </a>
               </li>
             </ul>

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useAuthApi } from "../Hooks/useAuth";
+import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = create((set) => {
   const { login, register, forgetPassword, resetPassword, verifyAccount } =
@@ -8,11 +9,16 @@ export const useAuthStore = create((set) => {
     loading: false,
     error: null,
     token: null,
+    user: localStorage.getItem("access_token")
+      ? jwtDecode(localStorage.getItem("access_token"))
+      : null,
     LoginUser: async (data, toast, navigate) => {
       try {
         const response = await login(data);
         const token = response.token;
         localStorage.setItem("access_token", token);
+        const decodedUser = jwtDecode(token);
+        set({ token: token, user: decodedUser });
         toast.success("Login is Success");
         navigate("/dashboard");
       } catch (error) {
@@ -56,8 +62,10 @@ export const useAuthStore = create((set) => {
         toast.error(error?.response?.data?.message);
       }
     },
-    LogoutUser: () => {
-      set({ token: null });
+    LogoutUser: (navigate) => {
+      localStorage.removeItem("access_token");
+      set({ user: null });
+      navigate("/");
     },
   };
 });

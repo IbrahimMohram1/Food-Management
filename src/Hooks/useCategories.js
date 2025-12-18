@@ -7,5 +7,9 @@ export const useCategory = () => {
     );
     return data;
   };
-  return { getCategoryList };
+  const deleteCategoryById = async (id) => {
+    const { data } = await axiosClient.delete(`/Category/${id}`);
+    return data;
+  };
+  return { getCategoryList, deleteCategoryById };
 };

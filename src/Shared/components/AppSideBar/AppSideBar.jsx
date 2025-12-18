@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import iconSide from "../../../assets/images/IconSideBar.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore";
 export default function AppSideBar() {
   let [isCollapsed, setIsCollapsed] = useState(false);
+  let { LogoutUser } = useAuthStore();
+  let navigate = useNavigate();
   const ToogleSideBar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -49,7 +52,7 @@ export default function AppSideBar() {
               Change Password{" "}
             </MenuItem>
             <MenuItem
-              component={<Link to={"/login"} />}
+              onClick={() => LogoutUser(navigate)}
               icon={<i className="fa-solid fa-arrow-right-from-bracket"></i>}
             >
               {" "}

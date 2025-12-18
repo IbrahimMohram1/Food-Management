@@ -2,15 +2,18 @@ import React from "react";
 import Header from "../../../Shared/components/Header/Header";
 import HeaderImage from "../../../assets/images/DashBaordImage.png";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function Dashboard() {
+  const { user } = useAuthStore();
+
   let navigate = useNavigate();
   return (
     <>
       <Header
         imageSize={"w-75"}
         spanText={"Welcome"}
-        title={"Ibrahim"}
+        title={user.userName}
         imgUrl={HeaderImage}
         description={
           "This is a welcoming screen for the entry of the application , you can now see the options"

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function ActionButtons() {
+export default function ActionButtons({ onDelete }) {
   return (
     <>
       <div className="dropdown">
@@ -27,8 +27,8 @@ export default function ActionButtons() {
             </div>
           </li>
           <li className="dropdown-item">
-            <div>
-              <i className=" text-main fa-solid fa-trash"></i>{" "}
+            <div onClick={onDelete}>
+              <i className=" text-danger fa-solid fa-trash"></i>{" "}
               <span className="mx-2">Delete</span>
             </div>
           </li>
