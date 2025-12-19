@@ -11,5 +11,20 @@ export const useCategory = () => {
     const { data } = await axiosClient.delete(`/Category/${id}`);
     return data;
   };
-  return { getCategoryList, deleteCategoryById };
+  const addCategoryApi = async (values) => {
+    const { data } = await axiosClient.post("/Category", values);
+
+    return data;
+  };
+  const updateCategoryApi = async (id, values) => {
+    const { data } = await axiosClient.put(`/Category/${id}`, values);
+
+    return data;
+  };
+  return {
+    getCategoryList,
+    deleteCategoryById,
+    addCategoryApi,
+    updateCategoryApi,
+  };
 };

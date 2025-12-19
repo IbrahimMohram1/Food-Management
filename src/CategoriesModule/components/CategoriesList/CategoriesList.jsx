@@ -10,11 +10,13 @@ import LoaderSpinner from "../../../Shared/components/LoaderSpinner/LoaderSpinne
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ConfirmDelete from "../../../Shared/components/ConfirmDelete/ConfirmDelete";
+import { useNavigate } from "react-router-dom";
 
 export default function CategoriesList() {
   let { fetchCategories, categories, loading, deleteCategory } =
     useCategoryStore();
   const [show, setShow] = useState(false);
+  let navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = (category) => {
@@ -45,6 +47,7 @@ export default function CategoriesList() {
           title={"Categories Table Details"}
           description={"You can check all details"}
           buttonTitle={"Add New Category"}
+          OnClick={() => navigate("/dashboard/category")}
         />
         <Modal show={show} onHide={handleClose}>
           <Modal.Header>
@@ -95,6 +98,9 @@ export default function CategoriesList() {
                         </td>
                         <td>
                           <ActionButtons
+                            onUpdate={() =>
+                              navigate(`/dashboard/category/${category.id}`)
+                            }
                             onDelete={() => handleShow(category)}
                           />
                         </td>

@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function SubHeader({ title, description, buttonTitle }) {
+export default function SubHeader({
+  title,
+  description,
+  buttonTitle,
+  OnClick,
+}) {
   return (
     <>
       <div className="  d-flex justify-content-between align-items-center   my-3 ">
@@ -9,7 +14,10 @@ export default function SubHeader({ title, description, buttonTitle }) {
           <p className="p-0 text-muted">{description}</p>
         </div>
         <div>
-          <button className="btn py-2 px-4 background-main text-white">
+          <button
+            onClick={OnClick}
+            className="btn py-2 px-4 background-main text-white"
+          >
             {buttonTitle}
           </button>{" "}
         </div>

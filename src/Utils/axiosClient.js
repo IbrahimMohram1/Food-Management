@@ -7,7 +7,7 @@ const axiosClient = axios.create({
 });
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access_token"); // جلب التوكن من localStorage
+    const token = localStorage.getItem("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

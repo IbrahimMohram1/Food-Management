@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useRecipesStore } from "../../../store/recipesStore";
 
-export default function ActionButtons({ onDelete }) {
+export default function ActionButtons({ onUpdate, onDelete }) {
+  const { recipes } = useRecipesStore();
+
   return (
     <>
       <div className="dropdown">
@@ -21,7 +24,7 @@ export default function ActionButtons({ onDelete }) {
             </div>
           </li>
           <li className="dropdown-item">
-            <div>
+            <div onClick={onUpdate}>
               <i className="fa-regular fa-pen-to-square text-main fs-6 "></i>
               <span className="mx-2">Edit</span>
             </div>

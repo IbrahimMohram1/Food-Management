@@ -9,5 +9,13 @@ export const useRecipes = () => {
     const { data } = await axiosClient.delete(`/Recipe/${id}`);
     return data;
   };
-  return { getRecipesList, deleteRecipeById };
+  const addRecipeApi = async (values) => {
+    const { data } = await axiosClient.post("/Recipe", values);
+    return data;
+  };
+  const updateRecipeApi = async (id, values) => {
+    const { data } = await axiosClient.put(`/Recipe/${id}`, values);
+    return data;
+  };
+  return { getRecipesList, deleteRecipeById, addRecipeApi, updateRecipeApi };
 };

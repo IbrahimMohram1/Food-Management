@@ -60,8 +60,12 @@ function App() {
         { index: true, element: <Dashboard /> },
         { path: "recipes", element: <RecipesList /> },
         { path: "recipe-data", element: <RecipeData /> },
+        { path: "recipe-data/:id", element: <RecipeData /> },
+
         { path: "categories", element: <CategoriesList /> },
         { path: "category", element: <CategoryData /> },
+        { path: "category/:id", element: <CategoryData /> },
+
         { path: "users", element: <UsersList /> },
       ],
     },

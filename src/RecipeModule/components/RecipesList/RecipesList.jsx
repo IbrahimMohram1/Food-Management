@@ -11,13 +11,16 @@ import { useAuthStore } from "../../../store/authStore";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ConfirmDelete from "../../../Shared/components/ConfirmDelete/ConfirmDelete";
+import { useNavigate } from "react-router-dom";
 export default function RecipesList() {
   const { recipes, loading, error, fetchRecipes, deleteRecipe } =
     useRecipesStore();
   const { user } = useAuthStore();
   const [show, setShow] = useState(false);
+  let navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const handleClose = () => setShow(false);
+
   const handleShow = (recipe) => {
     setSelectedCategory(recipe);
     setShow(true);
@@ -26,6 +29,7 @@ export default function RecipesList() {
     deleteRecipe(id);
     setShow(false);
   };
+
   let BaseUrl = "https://upskilling-egypt.com:3006/";
 
   useEffect(() => {
@@ -46,6 +50,7 @@ export default function RecipesList() {
         title={"Recipe Table Details"}
         description={"You can check all details"}
         buttonTitle={"Add New Item"}
+        OnClick={() => navigate("/dashboard/recipe-data")}
       />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header>
@@ -108,7 +113,12 @@ export default function RecipesList() {
                       <td>{recipe.tag.name}</td>
                       <td>{recipe?.category[0]?.name}</td>
                       <td>
-                        <ActionButtons onDelete={() => handleShow(recipe)} />
+                        <ActionButtons
+                          onUpdate={() =>
+                            navigate(`/dashboard/recipe-data/${recipe.id}`)
+                          }
+                          onDelete={() => handleShow(recipe)}
+                        />
                       </td>
                     </tr>
                   ))}
