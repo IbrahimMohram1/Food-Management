@@ -30,10 +30,10 @@ export default function Register() {
   const password = useWatch({ control, name: "password" });
 
   let navigate = useNavigate();
-  const registerUser = useAuthStore((state) => state.RegisterUser);
+  let { RegisterUser, loading } = useAuthStore();
 
   const onSubmit = (data) => {
-    registerUser(data, toast, navigate);
+    RegisterUser(data, toast, navigate);
   };
   return (
     <>
@@ -188,15 +188,16 @@ export default function Register() {
               )}
             </div>
           </div>
-
           <div className="links d-flex justify-content-end my-3">
             <Link className="text-main text-decoration-none" to="/login">
               Login Now?
             </Link>
           </div>
-
-          <button className="background-main btn w-100 text-white ">
-            Register
+          <button
+            className="background-main btn w-100 text-white"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Register"}
           </button>
         </form>
       </div>

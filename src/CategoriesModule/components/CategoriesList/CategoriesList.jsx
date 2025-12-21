@@ -134,8 +134,13 @@ export default function CategoriesList() {
                 <Button variant="secondary" onClick={handleClose}>
                   Cancel
                 </Button>
-                <Button type="submit" variant="success" className="ms-3">
-                  {isAdd ? "Save" : "Update"}
+                <Button
+                  type="submit"
+                  variant="success"
+                  className="ms-3"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : isAdd ? "Save" : "Update"}
                 </Button>
               </div>
             </form>
@@ -154,8 +159,13 @@ export default function CategoriesList() {
                 <Button variant="secondary" onClick={handleClose}>
                   Cancel
                 </Button>
-                <Button variant="danger" onClick={onSubmit} className="ms-3">
-                  Delete
+                <Button
+                  variant="danger"
+                  onClick={onSubmit}
+                  className="ms-3"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Delete"}
                 </Button>
               </div>
             </>

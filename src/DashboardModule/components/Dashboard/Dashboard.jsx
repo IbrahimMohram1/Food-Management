@@ -13,7 +13,7 @@ export default function Dashboard() {
       <Header
         imageSize={"w-75"}
         spanText={"Welcome"}
-        title={user.userName}
+        title={user?.userName}
         imgUrl={HeaderImage}
         description={
           "This is a welcoming screen for the entry of the application , you can now see the options"

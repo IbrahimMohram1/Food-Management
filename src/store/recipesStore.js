@@ -6,9 +6,10 @@ let { getRecipesList, deleteRecipeById, addRecipeApi, updateRecipeApi } =
   useRecipes();
 export const useRecipesStore = create((set, get) => ({
   recipes: [],
-  loading: true,
+  loading: false,
   fetchRecipes: async () => {
     try {
+      set({ loading: true });
       const { data } = await getRecipesList();
       set({
         recipes: data,
@@ -23,6 +24,8 @@ export const useRecipesStore = create((set, get) => ({
     }
   },
   deleteRecipe: async (id) => {
+    set({ loading: true });
+
     const prevRecipes = get().recipes;
 
     // Optimistic update
@@ -45,7 +48,9 @@ export const useRecipesStore = create((set, get) => ({
 
   addRecipe: async (newRecipe) => {
     try {
+      set({ loading: true });
       let response = await addRecipeApi(newRecipe);
+      set({ loading: false });
       toast.success(response.message);
     } catch (error) {
       set({
@@ -56,8 +61,10 @@ export const useRecipesStore = create((set, get) => ({
   },
   updateRecipe: async (id, updatedRecipe) => {
     try {
+      set({ loading: true });
       const response = await updateRecipeApi(id, updatedRecipe);
       toast.success(response.message || "Recipe updated successfully");
+      set({ loading: false });
       // refresh list
       await get().fetchRecipes();
       return response;

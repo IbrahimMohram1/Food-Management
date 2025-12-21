@@ -8,9 +8,10 @@ let { getCategoryList, deleteCategoryById, addCategoryApi, updateCategoryApi } =
 
 export const useCategoryStore = create((set, get) => ({
   categories: [],
-  loading: true,
+  loading: false,
   fetchCategories: async () => {
     try {
+      set({ loading: true });
       const { data } = await getCategoryList();
 
       set({
@@ -28,6 +29,7 @@ export const useCategoryStore = create((set, get) => ({
     }
   },
   deleteCategory: async (id) => {
+    set({ loading: true });
     const prevCategories = get().categories;
 
     // Optimistic update
@@ -55,8 +57,9 @@ export const useCategoryStore = create((set, get) => ({
   },
   addCategory: async (newCategory) => {
     try {
+      set({ loading: true });
       let response = await addCategoryApi(newCategory);
-
+      set({ loading: false });
       toast.success("Category has been added successfully!");
     } catch (error) {
       set({
@@ -67,8 +70,10 @@ export const useCategoryStore = create((set, get) => ({
   },
   updateCategory: async (id, data) => {
     try {
+      set({ loading: true });
       let response = await updateCategoryApi(id, data);
       console.log(response);
+      set({ loading: false });
 
       toast.success("Category has been Updated successfully!");
       return true;

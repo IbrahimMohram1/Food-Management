@@ -14,9 +14,9 @@ export default function Verfiy() {
     mode: "onBlur",
   });
   let navigate = useNavigate();
-  const VerifyAccount = useAuthStore((state) => state.VerifyAcc);
+  let { VerifyAcc, loading } = useAuthStore();
   const onSubmit = (data) => {
-    VerifyAccount(data, toast, navigate);
+    VerifyAcc(data, toast, navigate);
   };
   return (
     <>
@@ -59,8 +59,12 @@ export default function Verfiy() {
           {errors.code && (
             <div className="alert alert-danger p-2">{errors.code.message}</div>
           )}
-
-          <button className="background-main btn w-100 text-white">Send</button>
+          <button
+            className="background-main btn w-100 text-white"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Send"}
+          </button>
         </form>
       </div>
     </>

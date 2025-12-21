@@ -100,3 +100,11 @@ header {
   bottom: 0;
   height: 100dvh;
 }
+
+.btn.disabled,
+.btn:disabled,
+fieldset:disabled .btn {
+  opacity: 1 !important;
+  background-color: var(--main-color) !important;
+  cursor: not-allowed !important;
+}

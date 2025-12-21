@@ -14,10 +14,11 @@ export default function Login() {
     mode: "onBlur",
   });
   let navigate = useNavigate();
+  const { LoginUser, loading } = useAuthStore();
 
-  const login = useAuthStore((state) => state.LoginUser);
+  // const login = useAuthStore((state) => state.LoginUser);
   const onSubmit = (data) => {
-    login(data, toast, navigate);
+    LoginUser(data, toast, navigate);
   };
   return (
     <div className="form-container">
@@ -69,8 +70,13 @@ export default function Login() {
             Forget Password?
           </Link>
         </div>
-
-        <button className="background-main btn w-100 text-white">Login</button>
+        <button
+          className="background-main btn w-100 text-white"
+          disabled={loading}
+        >
+          {" "}
+          {loading ? "Loading..." : "Login"}{" "}
+        </button>{" "}
       </form>
     </div>
   );

@@ -9,7 +9,7 @@ import { LuUpload } from "react-icons/lu";
 export default function RecipeData() {
   const { tags, fetchTags } = useTagsStore();
   let { fetchCategories, categories } = useCategoryStore();
-  let { addRecipe, updateRecipe, recipes } = useRecipesStore();
+  let { addRecipe, updateRecipe, recipes, loading } = useRecipesStore();
   const [recipeToEdit, setRecipeToEdit] = useState(null);
 
   let navigate = useNavigate();
@@ -60,7 +60,7 @@ export default function RecipeData() {
       if (result) navigate("/dashboard/recipes");
     } else {
       const result = await addRecipe(recipesData);
-      if (result?.success) {
+      if (result) {
         navigate("/dashboard/recipes");
       }
     }
@@ -203,9 +203,14 @@ export default function RecipeData() {
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-success px-4 mx-3">
-              {isEdit ? "Update" : "Save"}
-            </button>{" "}
+
+            <button
+              type="submit"
+              className="btn btn-success px-4 mx-3"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : isEdit ? "Update" : "Save"}
+            </button>
           </div>
         </form>
       </div>

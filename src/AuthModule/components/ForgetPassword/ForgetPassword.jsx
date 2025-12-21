@@ -14,9 +14,9 @@ export default function ForgetPassword() {
     mode: "all",
   });
   let navigate = useNavigate();
-  const forgetPass = useAuthStore((store) => store.ForgetUserPassword);
+  let { ForgetUserPassword, loading } = useAuthStore();
   const onSubmit = (data) => {
-    forgetPass(data, toast, navigate);
+    ForgetUserPassword(data, toast, navigate);
   };
   return (
     <>
@@ -25,14 +25,13 @@ export default function ForgetPassword() {
           <h4>Forgot Your Password?</h4>
           <p className="text-muted">
             No worries! Please enter your email and we will send a password
-            reset link{" "}
+            reset link
           </p>
         </div>
 
         <form className="my-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="input-group mb-3">
             <span className="input-group-text bg-white" id="basic-addon1">
-              {" "}
               <i className="fa fa-envelope text-muted" aria-hidden="true"></i>
             </span>
             <input
@@ -47,8 +46,11 @@ export default function ForgetPassword() {
           {errors.email && (
             <div className="alert alert-danger p-2">{errors.email.message}</div>
           )}
-          <button className="background-main btn w-100 text-white">
-            Submit
+          <button
+            className="background-main btn w-100 text-white"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Sumbit"}
           </button>
         </form>
       </div>
