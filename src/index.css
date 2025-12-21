@@ -88,3 +88,8 @@ header {
 .modal-header .customCloseBtn i {
   cursor: pointer;
 }
+.customFileInput {
+  background-color: #f1fff0;
+  border: 1px dashed #4aa35a;
+  border-radius: 8px;
+}

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCategoryStore } from "../../../store/categoryStore";
-import { useEffect } from "react";
 import Header from "../../../Shared/components/Header/Header";
 import HeaderImage from "../../../assets/images/RecipesImage.png";
 import SubHeader from "../../../Shared/components/SubHeader/SubHeader";
@@ -9,111 +8,197 @@ import ActionButtons from "../../../Shared/components/ActionButtons/ActionButton
 import LoaderSpinner from "../../../Shared/components/LoaderSpinner/LoaderSpinner";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useForm } from "react-hook-form";
+import confirmImage from "../../../assets/images/NoDataImage.png";
 import ConfirmDelete from "../../../Shared/components/ConfirmDelete/ConfirmDelete";
-import { useNavigate } from "react-router-dom";
-
 export default function CategoriesList() {
-  let { fetchCategories, categories, loading, deleteCategory } =
-    useCategoryStore();
+  const {
+    fetchCategories,
+    categories,
+    loading,
+    deleteCategory,
+    addCategory,
+    updateCategory,
+  } = useCategoryStore();
+
   const [show, setShow] = useState(false);
-  let navigate = useNavigate();
+  const [mode, setMode] = useState("add"); // add | update | delete
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const handleClose = () => setShow(false);
-  const handleShow = (category) => {
-    setSelectedCategory(category);
-    setShow(true);
-  };
-  const handleDelete = (id) => {
-    deleteCategory(id);
-    fetchCategories();
-    setShow(false);
-  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" });
+
+  const isAdd = mode === "add";
+  const isUpdate = mode === "update";
+  const isDelete = mode === "delete";
+
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (isUpdate && selectedCategory) {
+      setValue("name", selectedCategory.name);
+    }
+
+    if (isAdd) {
+      reset();
+    }
+  }, [mode, selectedCategory]);
+
+  const openAdd = () => {
+    setMode("add");
+    setSelectedCategory(null);
+    setShow(true);
+  };
+
+  const openUpdate = (category) => {
+    setMode("update");
+    setSelectedCategory(category);
+    setShow(true);
+  };
+
+  const openDelete = (category) => {
+    setMode("delete");
+    setSelectedCategory(category);
+    setShow(true);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    reset();
+  };
+
+  const onSubmit = async (data) => {
+    if (isAdd) {
+      await addCategory(data);
+    }
+
+    if (isUpdate) {
+      await updateCategory(selectedCategory.id, data);
+    }
+
+    if (isDelete) {
+      await deleteCategory(selectedCategory.id);
+    }
+
+    fetchCategories();
+    handleClose();
+  };
+
   return (
     <>
-      <div>
-        <Header
-          imageSize={"w-50"}
-          title={"Items"}
-          spanText={"Categories"}
-          imgUrl={HeaderImage}
-          description={
-            "You can now add your items that any user can order it from the Application and you can edit"
-          }
-        />{" "}
-        <SubHeader
-          title={"Categories Table Details"}
-          description={"You can check all details"}
-          buttonTitle={"Add New Category"}
-          OnClick={() => navigate("/dashboard/category")}
-        />
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header>
-            <div className="customCloseBtn">
-              <i
-                className="fa-solid fa-xmark text-right fs-4 text-danger cursor-pointer"
-                onClick={handleClose}
+      <Header
+        imageSize={"w-50"}
+        title={"Items"}
+        spanText={"Categories"}
+        imgUrl={HeaderImage}
+        description="You can now add your items that any user can order it from the Application and you can edit"
+      />
+
+      <SubHeader
+        title={"Categories Table Details"}
+        description={"You can check all details"}
+        buttonTitle={"Add New Category"}
+        OnClick={openAdd}
+      />
+
+      {/* ONE MODAL */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {isAdd && "Add Category"}
+            {isUpdate && "Update Category"}
+            {isDelete && "Delete Category"}
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {(isAdd || isUpdate) && (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input
+                {...register("name", { required: "Name is Required" })}
+                className="form-control my-2"
+                placeholder="Category Name"
               />
-            </div>
-          </Modal.Header>
-          <Modal.Body>
-            <ConfirmDelete
-              Item={`Category ${selectedCategory?.name}`}
-              category={selectedCategory}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="outline-danger"
-              onClick={() => handleDelete(selectedCategory.id)}
-            >
-              Delete This Item
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <div className="table-container p-3">
-          <div className="">
-            {loading ? (
-              <LoaderSpinner />
-            ) : categories.length > 0 ? (
-              <div className="table-responsive vh-100">
-                <table className="table table-striped overflow-scroll w-100">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>CategoryName</th>
-                      <th>Category Creation Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {categories.map((category, index) => (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{category.name}</td>
-                        <td>
-                          {new Date(category.creationDate).toLocaleDateString()}
-                        </td>
-                        <td>
-                          <ActionButtons
-                            onUpdate={() =>
-                              navigate(`/dashboard/category/${category.id}`)
-                            }
-                            onDelete={() => handleShow(category)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {errors.name && (
+                <span className="text-danger">{errors.name.message}</span>
+              )}
+
+              <div className="d-flex justify-content-end mt-4">
+                <Button variant="secondary" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="success" className="ms-3">
+                  {isAdd ? "Save" : "Update"}
+                </Button>
               </div>
-            ) : (
-              <NoData />
-            )}
+            </form>
+          )}
+
+          {isDelete && (
+            <>
+              <>
+                <ConfirmDelete
+                  Item={`Category ${selectedCategory?.name}`}
+                  category={selectedCategory}
+                />
+              </>
+
+              <div className="d-flex justify-content-end mt-4">
+                <Button variant="secondary" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button variant="danger" onClick={onSubmit} className="ms-3">
+                  Delete
+                </Button>
+              </div>
+            </>
+          )}
+        </Modal.Body>
+      </Modal>
+
+      <div className="table-container p-3">
+        {loading ? (
+          <LoaderSpinner />
+        ) : categories.length ? (
+          <div className="table-responsive vh-100">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((category, index) => (
+                  <tr key={category.id}>
+                    <td>{index + 1}</td>
+                    <td>{category.name}</td>
+                    <td>
+                      {new Date(category.creationDate).toLocaleDateString()}
+                    </td>
+                    <td>
+                      <ActionButtons
+                        onUpdate={() => openUpdate(category)}
+                        onDelete={() => openDelete(category)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        ) : (
+          <NoData />
+        )}
       </div>
     </>
   );

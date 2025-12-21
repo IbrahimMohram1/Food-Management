@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useTagsStore } from "../../../store/tagsStore";
 import { useCategoryStore } from "../../../store/categoryStore";
 import { useForm } from "react-hook-form";
 import { useRecipesStore } from "../../../store/recipesStore";
+import { LuUpload } from "react-icons/lu";
 
 export default function RecipeData() {
   const { tags, fetchTags } = useTagsStore();
   let { fetchCategories, categories } = useCategoryStore();
   let { addRecipe, updateRecipe, recipes } = useRecipesStore();
+  const [recipeToEdit, setRecipeToEdit] = useState(null);
+
   let navigate = useNavigate();
   let {
     register,
@@ -18,22 +21,40 @@ export default function RecipeData() {
   } = useForm({
     mode: "onBlur",
   });
+  const imagePathToFile = async (imagePath) => {
+    const response = await fetch(
+      `https://upskilling-egypt.com:3006/${imagePath}`,
+    );
+    const blob = await response.blob();
 
-  const AppendToFormData = (data) => {
+    return new File([blob], "old-image.jpg", {
+      type: blob.type,
+    });
+  };
+
+  const AppendToFormData = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("price", data.price);
     formData.append("tagId", data.tagId);
     formData.append("categoriesIds", data.categoriesIds);
-    formData.append("recipeImage", data.recipeImage[0]);
+    if (data.recipeImage?.length) {
+      // صورة جديدة
+      formData.append("recipeImage", data.recipeImage[0]);
+    } else if (isEdit && recipeToEdit?.imagePath) {
+      // صورة قديمة → نحولها File
+      const oldImageFile = await imagePathToFile(recipeToEdit.imagePath);
+      formData.append("recipeImage", oldImageFile);
+    }
+
     return formData;
   };
   const { id } = useParams();
   const isEdit = Boolean(id);
 
   const onSubmit = async (data) => {
-    let recipesData = AppendToFormData(data);
+    let recipesData = await AppendToFormData(data);
     if (isEdit) {
       const result = await updateRecipe(id, recipesData);
       if (result) navigate("/dashboard/recipes");
@@ -47,14 +68,19 @@ export default function RecipeData() {
   useEffect(() => {
     fetchCategories();
     fetchTags();
+
     if (id) {
-      const recipeToEdit = recipes.find((item) => item.id === parseInt(id));
-      if (recipeToEdit) {
-        setValue("name", recipeToEdit.name || "");
-        setValue("tagId", recipeToEdit.tag?.id || "");
-        setValue("price", recipeToEdit.price || "");
-        setValue("categoriesIds", recipeToEdit.category?.[0]?.id || "");
-        setValue("description", recipeToEdit.description || "");
+      const found = recipes.find((item) => item.id === parseInt(id));
+      console.log(found);
+
+      if (found) {
+        setRecipeToEdit(found);
+
+        setValue("name", found.name || "");
+        setValue("tagId", found.tag?.id || "");
+        setValue("price", found.price || "");
+        setValue("categoriesIds", found.category?.[0]?.id || "");
+        setValue("description", found.description || "");
       }
     }
   }, [id]);
@@ -146,20 +172,30 @@ export default function RecipeData() {
               {errors.description.message}
             </span>
           )}
+          <label
+            htmlFor="recipeImageInput"
+            className="customFileInput p-4 my-3 d-flex flex-column justify-content-center align-items-center"
+            style={{ cursor: "pointer" }}
+          >
+            <LuUpload className="fs-2 my-2" />
+            <p className="mb-0">
+              Drag & Drop or{" "}
+              <span className="text-main fw-bold">Choose a Item Image</span> to
+              Upload
+            </p>
+          </label>
           <input
             {...register("recipeImage", {
-              required: isEdit ? "Recipe Image is Required" : false,
+              required: !isEdit && "Image Is Required",
             })}
+            id="recipeImageInput"
             type="file"
-            className="form-control my-2"
+            accept="image/*"
+            className="form-control my-2 d-none"
             placeholder="Recipe Image"
             aria-describedby="basic-addon1"
           />
-          {errors.recipeImage && (
-            <span className="text-danger my-2">
-              {errors.recipeImage.message}
-            </span>
-          )}
+
           <div className="d-flex justify-content-end mt-4">
             <button
               onClick={() => navigate("/dashboard/recipes")}
