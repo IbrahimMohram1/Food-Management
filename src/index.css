@@ -93,3 +93,10 @@ header {
   border: 1px dashed #4aa35a;
   border-radius: 8px;
 }
+
+.sideBar {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  height: 100dvh;
+}
