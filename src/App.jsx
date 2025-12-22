@@ -60,15 +60,36 @@ function App() {
       children: [
         { index: true, element: <Dashboard /> },
         { path: "recipes", element: <RecipesList /> },
-        { path: "recipe-data", element: <RecipeData /> },
-        { path: "recipe-data/:id", element: <RecipeData /> },
+        {
+          path: "recipe-data",
+          element: (
+            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+              <RecipeData />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "recipe-data/:id",
+          element: (
+            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+              <RecipeData />
+            </ProtectedRoute>
+          ),
+        },
         { path: "chnage-pass", element: <ChangePassword /> },
 
         { path: "categories", element: <CategoriesList /> },
         { path: "category", element: <CategoryData /> },
         { path: "category/:id", element: <CategoryData /> },
 
-        { path: "users", element: <UsersList /> },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoute allowedRoles={["SuperAdmin"]}>
+              <UsersList />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
   ]);

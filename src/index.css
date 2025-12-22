@@ -134,3 +134,7 @@ fieldset:disabled .btn {
   color: #fff;
   border-color: #1f263e;
 }
+
+.w-fit {
+  width: fit-content;
+}

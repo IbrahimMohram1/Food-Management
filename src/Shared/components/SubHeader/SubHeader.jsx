@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function SubHeader({
   title,
@@ -7,6 +8,8 @@ export default function SubHeader({
   showButton,
   OnClick,
 }) {
+  let { user } = useAuthStore();
+
   return (
     <>
       <div className="  d-flex justify-content-between align-items-center   my-3 ">
@@ -15,7 +18,7 @@ export default function SubHeader({
           <p className="p-0 text-muted">{description}</p>
         </div>
         <div>
-          {showButton && (
+          {showButton && user.userGroup === "SuperAdmin" && (
             <button
               onClick={OnClick}
               className="btn py-2 px-4 background-main text-white"

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 export default function AppSideBar() {
   let [isCollapsed, setIsCollapsed] = useState(false);
-  let { LogoutUser } = useAuthStore();
+  let { LogoutUser, user } = useAuthStore();
   let navigate = useNavigate();
   const ToogleSideBar = () => {
     setIsCollapsed(!isCollapsed);
@@ -29,12 +29,14 @@ export default function AppSideBar() {
               {" "}
               Home{" "}
             </MenuItem>
-            <MenuItem
-              component={<Link to={"/dashboard/users"} />}
-              icon={<i className="fa-regular fa-user"></i>}
-            >
-              Users
-            </MenuItem>
+            {user.userGroup === "SuperAdmin" && (
+              <MenuItem
+                component={<Link to={"/dashboard/users"} />}
+                icon={<i className="fa-regular fa-user"></i>}
+              >
+                Users
+              </MenuItem>
+            )}
             <MenuItem
               component={<Link to={"/dashboard/recipes"} />}
               icon={<i className="fa-solid fa-border-all"></i>}

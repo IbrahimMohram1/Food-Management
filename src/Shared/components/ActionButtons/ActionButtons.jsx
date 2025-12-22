@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useRecipesStore } from "../../../store/recipesStore";
+import { useAuthStore } from "../../../store/authStore";
 
 export default function ActionButtons({ onUpdate, onDelete }) {
   const { recipes } = useRecipesStore();
-
+  let { user } = useAuthStore();
   return (
     <>
       <div className="dropdown">
         <li
-          className="  "
+          className="w-fit"
           type="button"
           id="dropdownMenu2"
           data-bs-toggle="dropdown"
@@ -23,18 +24,22 @@ export default function ActionButtons({ onUpdate, onDelete }) {
               <span className="mx-2">View</span>
             </div>
           </li>
-          <li className="dropdown-item">
-            <div onClick={onUpdate}>
-              <i className="fa-regular fa-pen-to-square text-main fs-6 "></i>
-              <span className="mx-2">Edit</span>
-            </div>
-          </li>
-          <li className="dropdown-item">
-            <div onClick={onDelete}>
-              <i className=" text-danger fa-solid fa-trash"></i>{" "}
-              <span className="mx-2">Delete</span>
-            </div>
-          </li>
+          {user.userGroup === "SuperAdmin" && (
+            <li className="dropdown-item">
+              <div onClick={onUpdate}>
+                <i className="fa-regular fa-pen-to-square text-main fs-6 "></i>
+                <span className="mx-2">Edit</span>
+              </div>
+            </li>
+          )}
+          {user.userGroup === "SuperAdmin" && (
+            <li className="dropdown-item">
+              <div onClick={onDelete}>
+                <i className=" text-danger fa-solid fa-trash"></i>{" "}
+                <span className="mx-2">Delete</span>
+              </div>
+            </li>
+          )}
         </ul>
       </div>
     </>
