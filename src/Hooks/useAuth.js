@@ -26,6 +26,10 @@ export const useAuthApi = () => {
     const { data } = await axiosClient.delete(`/Users/${id}`);
     return data;
   };
+  const chnagePassword = async (values) => {
+    const { data } = await axiosClient.put(`/Users/ChangePassword`, values);
+    return data;
+  };
 
   return {
     login,
@@ -34,5 +38,6 @@ export const useAuthApi = () => {
     resetPassword,
     verifyAccount,
     deleteAccount,
+    chnagePassword,
   };
 };

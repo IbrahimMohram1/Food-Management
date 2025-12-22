@@ -47,7 +47,10 @@ export default function AppSideBar() {
             >
               Categories
             </MenuItem>
-            <MenuItem icon={<i className="fa-solid fa-unlock"></i>}>
+            <MenuItem
+              component={<Link to={"/dashboard/chnage-pass"} />}
+              icon={<i className="fa-solid fa-unlock"></i>}
+            >
               {" "}
               Change Password{" "}
             </MenuItem>

@@ -11,6 +11,7 @@ export const useAuthStore = create((set) => {
     resetPassword,
     verifyAccount,
     deleteAccount,
+    chnagePassword,
   } = useAuthApi();
   return {
     loading: false,
@@ -95,6 +96,16 @@ export const useAuthStore = create((set) => {
         toast.success("User Is Deleted Successufly");
       } catch (error) {
         console.log(error);
+      }
+    },
+    changePass: async (data, navigate) => {
+      try {
+        set({ loading: true });
+        const response = await chnagePassword(data);
+        toast.success("Password is Changed Successufly");
+        navigate("/dashboard");
+      } catch (error) {
+        toast.error("error Password Changing is Falied");
       }
     },
     LogoutUser: (navigate) => {
