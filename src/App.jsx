@@ -24,6 +24,7 @@ import CategoryData from "./CategoriesModule/components/CategoryData/CategoryDat
 import UsersList from "./UsersModule/components/UsersList/UsersList";
 import { Bounce, ToastContainer } from "react-toastify";
 import ProtectedRoute from "./Shared/components/ProtectedRoute/ProtectedRoute";
+import ChangePassword from "./Shared/components/ChangePassword/ChangePassword";
 
 function App() {
   const routes = createHashRouter([
@@ -61,6 +62,7 @@ function App() {
         { path: "recipes", element: <RecipesList /> },
         { path: "recipe-data", element: <RecipeData /> },
         { path: "recipe-data/:id", element: <RecipeData /> },
+        { path: "chnage-pass", element: <ChangePassword /> },
 
         { path: "categories", element: <CategoriesList /> },
         { path: "category", element: <CategoryData /> },

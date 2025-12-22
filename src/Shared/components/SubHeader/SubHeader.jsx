@@ -4,6 +4,7 @@ export default function SubHeader({
   title,
   description,
   buttonTitle,
+  showButton,
   OnClick,
 }) {
   return (
@@ -14,12 +15,14 @@ export default function SubHeader({
           <p className="p-0 text-muted">{description}</p>
         </div>
         <div>
-          <button
-            onClick={OnClick}
-            className="btn py-2 px-4 background-main text-white"
-          >
-            {buttonTitle}
-          </button>{" "}
+          {showButton && (
+            <button
+              onClick={OnClick}
+              className="btn py-2 px-4 background-main text-white"
+            >
+              {buttonTitle}
+            </button>
+          )}
         </div>
       </div>
     </>

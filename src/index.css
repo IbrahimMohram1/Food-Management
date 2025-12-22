@@ -108,3 +108,29 @@ fieldset:disabled .btn {
   background-color: var(--main-color) !important;
   cursor: not-allowed !important;
 }
+.pagination {
+  gap: 6px;
+}
+
+/* كل زر */
+.page-link {
+  color: #1f263e; /* لون النص */
+  border: 1px solid #198754;
+  border-radius: 8px;
+  padding: 6px 12px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.page-link:hover {
+  background-color: #1f263e;
+  color: #fff;
+}
+
+/* الصفحة الحالية */
+.page-item.active .page-link {
+  background-color: #1f263e;
+  color: #fff;
+  border-color: #1f263e;
+}

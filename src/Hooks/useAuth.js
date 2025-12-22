@@ -22,6 +22,17 @@ export const useAuthApi = () => {
     const { data } = await axiosClient.post("/Users/verify", values);
     return data;
   };
+  const deleteAccount = async (id) => {
+    const { data } = await axiosClient.delete(`/Users/${id}`);
+    return data;
+  };
 
-  return { login, register, forgetPassword, resetPassword, verifyAccount };
+  return {
+    login,
+    register,
+    forgetPassword,
+    resetPassword,
+    verifyAccount,
+    deleteAccount,
+  };
 };

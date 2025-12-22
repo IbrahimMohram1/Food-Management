@@ -1,10 +1,17 @@
 import { create } from "zustand";
 import { useAuthApi } from "../Hooks/useAuth";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 export const useAuthStore = create((set) => {
-  const { login, register, forgetPassword, resetPassword, verifyAccount } =
-    useAuthApi();
+  const {
+    login,
+    register,
+    forgetPassword,
+    resetPassword,
+    verifyAccount,
+    deleteAccount,
+  } = useAuthApi();
   return {
     loading: false,
     error: null,
@@ -79,6 +86,15 @@ export const useAuthStore = create((set) => {
         navigate("/login");
       } catch (error) {
         toast.error(error?.response?.data?.message);
+      }
+    },
+    deleteUser: async (id) => {
+      try {
+        set({ loading: true });
+        const response = await deleteAccount(id);
+        toast.success("User Is Deleted Successufly");
+      } catch (error) {
+        console.log(error);
       }
     },
     LogoutUser: (navigate) => {

@@ -10,7 +10,7 @@ export default function MasterLayout() {
         <div className=" sideBar ">
           <AppSideBar />
         </div>
-        <div className="  w-100   ps-3 ">
+        <div className="  w-100   ps-3 overflow-x-hidden">
           <Navbar />
           <Outlet />
         </div>

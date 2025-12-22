@@ -12,9 +12,17 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ConfirmDelete from "../../../Shared/components/ConfirmDelete/ConfirmDelete";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../../Shared/components/Pagination/Pagination";
 export default function RecipesList() {
-  const { recipes, loading, error, fetchRecipes, deleteRecipe } =
-    useRecipesStore();
+  const {
+    recipes,
+    loading,
+    error,
+    fetchRecipes,
+    deleteRecipe,
+    pageNumber,
+    totalNumberOfPages,
+  } = useRecipesStore();
   const { user } = useAuthStore();
   const [show, setShow] = useState(false);
   let navigate = useNavigate();
@@ -50,6 +58,7 @@ export default function RecipesList() {
         title={"Recipe Table Details"}
         description={"You can check all details"}
         buttonTitle={"Add New Item"}
+        showButton={true}
         OnClick={() => navigate("/dashboard/recipe-data")}
       />
       <Modal show={show} onHide={handleClose}>
@@ -99,7 +108,7 @@ export default function RecipesList() {
                 <tbody>
                   {recipes.map((recipe, index) => (
                     <tr key={index}>
-                      <th scope="row">{index + 1}</th>
+                      <td>{(pageNumber - 1) * 10 + index + 1}</td>
                       <td>{recipe.name}</td>
                       <td>
                         <img
@@ -124,6 +133,11 @@ export default function RecipesList() {
                   ))}
                 </tbody>
               </table>
+              <Pagination
+                currentPage={pageNumber}
+                totalPages={totalNumberOfPages}
+                onPageChange={(page) => fetchRecipes(page)}
+              />
             </div>
           ) : (
             <NoData />

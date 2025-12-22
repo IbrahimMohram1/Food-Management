@@ -11,6 +11,7 @@ import Modal from "react-bootstrap/Modal";
 import { useForm } from "react-hook-form";
 import confirmImage from "../../../assets/images/NoDataImage.png";
 import ConfirmDelete from "../../../Shared/components/ConfirmDelete/ConfirmDelete";
+import Pagination from "../../../Shared/components/Pagination/Pagination";
 export default function CategoriesList() {
   const {
     fetchCategories,
@@ -19,6 +20,8 @@ export default function CategoriesList() {
     deleteCategory,
     addCategory,
     updateCategory,
+    totalNumberOfPages,
+    pageNumber,
   } = useCategoryStore();
 
   const [show, setShow] = useState(false);
@@ -104,6 +107,7 @@ export default function CategoriesList() {
       <SubHeader
         title={"Categories Table Details"}
         description={"You can check all details"}
+        showButton={true}
         buttonTitle={"Add New Category"}
         OnClick={openAdd}
       />
@@ -190,7 +194,8 @@ export default function CategoriesList() {
               <tbody>
                 {categories.map((category, index) => (
                   <tr key={category.id}>
-                    <td>{index + 1}</td>
+                    <td>{(pageNumber - 1) * 10 + index + 1}</td>
+
                     <td>{category.name}</td>
                     <td>
                       {new Date(category.creationDate).toLocaleDateString()}
@@ -205,6 +210,11 @@ export default function CategoriesList() {
                 ))}
               </tbody>
             </table>
+            <Pagination
+              currentPage={pageNumber}
+              totalPages={totalNumberOfPages}
+              onPageChange={(page) => fetchCategories(page)}
+            />
           </div>
         ) : (
           <NoData />

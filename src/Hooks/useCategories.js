@@ -1,9 +1,9 @@
 import axiosClient from "../Utils/axiosClient";
 
 export const useCategory = () => {
-  const getCategoryList = async () => {
+  const getCategoryList = async (page) => {
     const { data } = await axiosClient.get(
-      "/Category/?pageSize=10&pageNumber=1",
+      `/Category/?pageSize=10&pageNumber=${page}`,
     );
     return data;
   };

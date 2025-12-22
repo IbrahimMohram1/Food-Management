@@ -9,15 +9,18 @@ let { getCategoryList, deleteCategoryById, addCategoryApi, updateCategoryApi } =
 export const useCategoryStore = create((set, get) => ({
   categories: [],
   loading: false,
-  fetchCategories: async () => {
+  pageNumber: 1,
+  totalNumberOfPages: 1,
+  fetchCategories: async (page = 1) => {
     try {
       set({ loading: true });
-      const { data } = await getCategoryList();
+      const data = await getCategoryList(page);
 
       set({
-        categories: data,
+        categories: data.data,
         loading: false,
-
+        pageNumber: data.pageNumber,
+        totalNumberOfPages: data.totalNumberOfPages,
         error: null,
       });
     } catch (error) {

@@ -7,12 +7,16 @@ let { getRecipesList, deleteRecipeById, addRecipeApi, updateRecipeApi } =
 export const useRecipesStore = create((set, get) => ({
   recipes: [],
   loading: false,
-  fetchRecipes: async () => {
+  pageNumber: 1,
+  totalNumberOfPages: 1,
+  fetchRecipes: async (page = 1) => {
     try {
       set({ loading: true });
-      const { data } = await getRecipesList();
+      const data = await getRecipesList(page);
       set({
-        recipes: data,
+        recipes: data.data,
+        pageNumber: data.pageNumber,
+        totalNumberOfPages: data.totalNumberOfPages,
         loading: false,
         error: null,
       });

@@ -1,23 +1,31 @@
 import { create } from "zustand";
 import { useRecipes } from "../Hooks/useRecipes";
-import { useUsersList } from "../Hooks/useUsers";
+import { useUsers } from "../Hooks/useUsers";
 
 let { getUsersList } = useUsers();
 
-export const useUsersStore = create((set) => ({
+export const useUsersStore = create((set, get) => ({
   users: [],
-  fetchUsersList: async () => {
+  loading: false,
+  pageNumber: 1,
+  totalNumberOfPages: 1,
+  fetchUsersList: async (page = 1) => {
     try {
-      const { data } = await getUsersList();
-      console.log(data);
+      set({ loading: true });
 
+      const data = await getUsersList(page);
+      console.log(data);
       set({
-        users: data,
+        users: data.data,
+        pageNumber: data.pageNumber,
+        totalNumberOfPages: data.totalNumberOfPages,
+        loading: false,
         error: null,
       });
     } catch (error) {
       set({
-        error: err.response?.data?.message || "Error fetching recipes",
+        loading: false,
+        error: "Error fetching recipes",
       });
     }
   },
