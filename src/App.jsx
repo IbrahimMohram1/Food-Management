@@ -25,6 +25,7 @@ import UsersList from "./UsersModule/components/UsersList/UsersList";
 import { Bounce, ToastContainer } from "react-toastify";
 import ProtectedRoute from "./Shared/components/ProtectedRoute/ProtectedRoute";
 import ChangePassword from "./Shared/components/ChangePassword/ChangePassword";
+import FavList from "./FavouriteModule/components/FavList/FavList";
 
 function App() {
   const routes = createHashRouter([
@@ -77,7 +78,6 @@ function App() {
           ),
         },
         { path: "chnage-pass", element: <ChangePassword /> },
-
         { path: "categories", element: <CategoriesList /> },
         { path: "category", element: <CategoryData /> },
         { path: "category/:id", element: <CategoryData /> },
@@ -87,6 +87,14 @@ function App() {
           element: (
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
               <UsersList />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "favs",
+          element: (
+            <ProtectedRoute allowedRoles={["SystemUser"]}>
+              <FavList />
             </ProtectedRoute>
           ),
         },
@@ -109,7 +117,6 @@ function App() {
         theme="colored"
         transition={Bounce}
       />
-      {/* <h1>Hi , We're UpSkilling </h1> */}
     </>
   );
 }

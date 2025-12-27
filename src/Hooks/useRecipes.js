@@ -19,5 +19,25 @@ export const useRecipes = () => {
     const { data } = await axiosClient.put(`/Recipe/${id}`, values);
     return data;
   };
-  return { getRecipesList, deleteRecipeById, addRecipeApi, updateRecipeApi };
+  const addToFavApi = async (id) => {
+    const { data } = await axiosClient.post(`/userRecipe`, { recipeId: id });
+    return data;
+  };
+  const deleteFromFavApi = async (id) => {
+    const { data } = await axiosClient.delete(`/userRecipe/${id}`);
+    return data;
+  };
+  const getFavRecipesApi = async () => {
+    const { data } = await axiosClient.get(`/userRecipe`);
+    return data;
+  };
+  return {
+    getRecipesList,
+    deleteRecipeById,
+    addRecipeApi,
+    updateRecipeApi,
+    addToFavApi,
+    deleteFromFavApi,
+    getFavRecipesApi,
+  };
 };

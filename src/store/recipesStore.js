@@ -2,13 +2,27 @@ import { create } from "zustand";
 import { useRecipes } from "../Hooks/useRecipes";
 import { toast } from "react-toastify";
 
-let { getRecipesList, deleteRecipeById, addRecipeApi, updateRecipeApi } =
-  useRecipes();
+let {
+  getRecipesList,
+  deleteRecipeById,
+  addRecipeApi,
+  updateRecipeApi,
+  addToFavApi,
+  getFavRecipesApi,
+  deleteFromFavApi,
+} = useRecipes();
 export const useRecipesStore = create((set, get) => ({
   recipes: [],
   loading: false,
   pageNumber: 1,
   totalNumberOfPages: 1,
+  favRecipes: {
+    data: [],
+    pageNumber: 0,
+    pageSize: 0,
+    totalNumberOfPages: 0,
+    totalNumberOfRecords: 0,
+  },
   fetchRecipes: async (page = 1) => {
     try {
       set({ loading: true });
@@ -74,6 +88,61 @@ export const useRecipesStore = create((set, get) => ({
       return response;
     } catch (error) {
       set({ loading: false, error: "Error updating recipe" });
+      return null;
+    }
+  },
+  userAddToFav: async (id) => {
+    try {
+      set({ loading: true });
+      const response = await addToFavApi(id);
+      console.log(response);
+
+      toast.success(response.message || "Recipe Added successfully");
+      await get().getFavs();
+
+      set({ loading: false });
+      // refresh list
+      return response;
+    } catch (error) {
+      set({ loading: false, error: "Error Add recipe to fav" });
+      return null;
+    }
+  },
+  getFavs: async () => {
+    try {
+      set({ loading: true });
+      const response = await getFavRecipesApi();
+      console.log(response.data);
+      set({
+        favRecipes: {
+          data: response.data || [], // array ثابتة
+          pageNumber: response.data?.pageNumber || 1,
+          pageSize: response.data?.pageSize || 5,
+          totalNumberOfPages: response.data?.totalNumberOfPages || 0,
+          totalNumberOfRecords: response.data?.totalNumberOfRecords || 0,
+        },
+        loading: false,
+      });
+      // refresh list
+      return response.data;
+    } catch (error) {
+      set({ loading: false, error: "Error Add recipe to fav" });
+      return null;
+    }
+  },
+  deleteFav: async (id) => {
+    try {
+      set({ loading: true });
+      const response = await deleteFromFavApi(id);
+      toast.success(response.message || "Fav Recipe deleted successfully");
+      await get().getFavs();
+
+      console.log(response);
+      set({ loading: false });
+      // refresh list
+      return response;
+    } catch (error) {
+      set({ loading: false, error: "Error Add recipe to fav" });
       return null;
     }
   },

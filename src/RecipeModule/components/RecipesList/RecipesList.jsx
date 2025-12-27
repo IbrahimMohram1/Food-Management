@@ -19,6 +19,7 @@ export default function RecipesList() {
     loading,
     error,
     fetchRecipes,
+    userAddToFav,
     deleteRecipe,
     pageNumber,
     totalNumberOfPages,
@@ -26,16 +27,36 @@ export default function RecipesList() {
   const { user } = useAuthStore();
   const [show, setShow] = useState(false);
   let navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const handleClose = () => setShow(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
-  const handleShow = (recipe) => {
-    setSelectedCategory(recipe);
+  const [modalMode, setModalMode] = useState(""); // delete | fav
+  const handleClose = () => {
+    setShow(false);
+    setModalMode("");
+    setSelectedRecipe(null);
+  };
+
+  const handleDeleteShow = (recipe) => {
+    setSelectedRecipe(recipe);
+    setModalMode("delete");
     setShow(true);
   };
-  const handleDelete = (id) => {
-    deleteRecipe(id);
-    setShow(false);
+
+  const handleFavShow = (recipe) => {
+    setSelectedRecipe(recipe);
+    setModalMode("fav");
+    setShow(true);
+  };
+
+  const handleDelete = () => {
+    deleteRecipe(selectedRecipe.id);
+    handleClose();
+  };
+
+  const handleAddToFav = () => {
+    console.log("Add To Fav:", selectedRecipe.id);
+    userAddToFav(selectedRecipe.id);
+    handleClose();
   };
 
   let BaseUrl = "https://upskilling-egypt.com:3006/";
@@ -65,24 +86,50 @@ export default function RecipesList() {
         <Modal.Header>
           <div className="customCloseBtn">
             <i
-              className="fa-solid fa-xmark text-right fs-4 text-danger cursor-pointer"
+              className="fa-solid fa-xmark fs-4 text-danger cursor-pointer"
               onClick={handleClose}
             />
           </div>
         </Modal.Header>
+
         <Modal.Body>
-          <ConfirmDelete
-            Item={`Recipe ${selectedCategory?.name}`}
-            category={selectedCategory}
-          />
+          {modalMode === "delete" && (
+            <ConfirmDelete
+              Item={`Recipe ${selectedRecipe?.name}`}
+              category={selectedRecipe}
+            />
+          )}
+
+          {modalMode === "fav" && (
+            <div>
+              <div>
+                <img
+                  className="img-fluid"
+                  src={`${BaseUrl}${selectedRecipe.imagePath}`}
+                  alt={selectedRecipe.name}
+                />{" "}
+              </div>
+              <p className="fw-bold text-center">
+                Are you sure you want to add
+                <span className="text-success"> {selectedRecipe?.name} </span>
+                to your favorites?
+              </p>
+            </div>
+          )}
         </Modal.Body>
+
         <Modal.Footer>
-          <Button
-            variant="outline-danger"
-            onClick={() => handleDelete(selectedCategory.id)}
-          >
-            Delete This Item
-          </Button>
+          {modalMode === "delete" && (
+            <Button variant="outline-danger" onClick={handleDelete}>
+              Delete This Item
+            </Button>
+          )}
+
+          {modalMode === "fav" && (
+            <Button variant="outline-success" onClick={handleAddToFav}>
+              Confirm Add To Favorite
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
 
@@ -126,7 +173,8 @@ export default function RecipesList() {
                           onUpdate={() =>
                             navigate(`/dashboard/recipe-data/${recipe.id}`)
                           }
-                          onDelete={() => handleShow(recipe)}
+                          onDelete={() => handleDeleteShow(recipe)}
+                          onFav={() => handleFavShow(recipe)}
                         />
                       </td>
                     </tr>

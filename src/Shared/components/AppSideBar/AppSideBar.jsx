@@ -4,7 +4,7 @@ import iconSide from "../../../assets/images/IconSideBar.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
 export default function AppSideBar() {
-  let [isCollapsed, setIsCollapsed] = useState(false);
+  let [isCollapsed, setIsCollapsed] = useState(true);
   let { LogoutUser, user } = useAuthStore();
   let navigate = useNavigate();
   const ToogleSideBar = () => {
@@ -43,12 +43,22 @@ export default function AppSideBar() {
             >
               Recipes{" "}
             </MenuItem>
-            <MenuItem
-              component={<Link to={"/dashboard/categories"} />}
-              icon={<i className="fa-regular fa-calendar"></i>}
-            >
-              Categories
-            </MenuItem>
+            {user.userGroup === "SystemUser" && (
+              <MenuItem
+                component={<Link to={"/dashboard/favs"} />}
+                icon={<i className="fa-regular fa-heart"></i>}
+              >
+                Favs
+              </MenuItem>
+            )}
+            {user.userGroup === "SuperAdmin" && (
+              <MenuItem
+                component={<Link to={"/dashboard/categories"} />}
+                icon={<i className="fa-regular fa-calendar"></i>}
+              >
+                Categories
+              </MenuItem>
+            )}
             <MenuItem
               component={<Link to={"/dashboard/chnage-pass"} />}
               icon={<i className="fa-solid fa-unlock"></i>}
